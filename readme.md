@@ -40,6 +40,7 @@
    ```sh
    npm run acceptance-tests-local
    ```
+   - Note that the code uses the real database, so acceptance tests can't be executed from the multiple machines at the same time.
 ## User Stories
 
 - As a user, I want to report a temperature
