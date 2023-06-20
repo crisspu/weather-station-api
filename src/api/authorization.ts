@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import { userRepository } from "../infrastructure/repositories";
+import { getRepository } from "../infrastructure/repositories";
 
 export const authorizeForStation = async (request: Request, response: Response, next: NextFunction) => {
     const { authorization } = request.headers;
     const { stationId } = request.params;
-    if (!isAuthorizedForStation(getUserName(authorization), stationId))
+    if (!await isAuthorizedForStation(getUserName(authorization), stationId))
         return response.status(401).send({ error: `User not authorized.` });
 
     next();
@@ -27,11 +27,12 @@ export function getUserName(authorization: string | undefined): string | undefin
     return;
 };
 
-function isAuthorizedForStation(userName: string | undefined, stationId: string): boolean {
+async function isAuthorizedForStation(userName: string | undefined, stationId: string): Promise<boolean> {
     if (!userName)
         return false;
 
-    const user = userRepository.getByUserName(userName);
+    const repo = await getRepository();
+    const user = repo.user.getByUserName(userName);
     if (!user)
         return false;
 

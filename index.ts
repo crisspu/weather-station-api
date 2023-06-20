@@ -4,8 +4,7 @@ import {
     postStationTemperatureReading,
     getStationTemperatureReadings, putStationTemperatureReading, deleteStationTemperatureReadings,
     getStationTemparatureReadingById, deleteStationTemparatureReadingById,
-    getStationCumulativeTemperatureReadings, 
-    settings } from "./src/api/controllers";
+    getStationCumulativeTemperatureReadings } from "./src/api/controllers";
 import { authorizeForStation } from "./src/api/authorization";
 
 const app: Application = express();
@@ -22,9 +21,6 @@ app.get("/", async (_: Request, response: Response) => {
         version: "1.0.0"
     });
 });
-
-// API Settings
-settings.throttleReports = false;  // Set to true if you wanna throttle report creations to 1 minute per report
 
 // Mapping
 app.get("/api/stations", getStations);

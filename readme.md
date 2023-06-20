@@ -27,6 +27,10 @@
    npm run unit-tests
    ```
 
+2. Setup database
+   - Open **src/settings.ts** file.
+   - Update `settings.database.key` value.
+
 2. Start the server
    ```sh
    npm run start-dev
@@ -62,7 +66,8 @@
 - Users are currently hardcoded in **infrastructure/data.ts** file.
   - See the file to see which users have access to which stations.
 - Stations are currently hardcoded in **infrastructure/data.ts** file.
-- Temperature readings currently use in-memory implementation (see **infrastructure/hardcoded-repositories.ts** file).
+- Temperature readings currently use Cosmos DB database.
+  - There is also unused in-memory implementation (see **infrastructure/hardcoded-repositories.ts** file).
 
 ## Example Calls
 
@@ -212,15 +217,11 @@ Authorization: Basic dXNlcjAwMTo=
 
 ## Notes
 
-- There is no configuration file and the project is prepared only for local development and testing.
+- The project is prepared only for local development and testing.
 - All API routes are defined in **index.ts** file.
-- To enable 1 minute temperature reporting throttling, set `throttleReports` property to `true` in **index.ts** file:
-  ```TypeScript
-  // API Settings
-  settings.throttleReports = true;
-  ```
-    - Enabling this will break acceptance tests!
-    - That is why the setting is disabled by default.
-    - Without this setting being enabled, acceptance criteria #2 is not covered.
+- To enable 1 minute temperature reporting throttling, set `throttleReports` property to `true` in **src/settings.ts** file.
+  - Enabling this will break acceptance tests!
+  - That is why the setting is disabled by default.
+  - Without this setting being enabled, acceptance criteria #2 is not covered.
 - Only Basic authorization is supported for now.
 - User authentication was not implemented and password is not needed and it's ignored if provided.

@@ -1,19 +1,20 @@
 import { Request, Response } from 'express';
-import { stationRepository, temperatureReadingsRepository } from '../infrastructure/repositories';
+import { getRepository } from '../infrastructure/repositories';
 import { TemperatureReading } from '../domain/entities';
 import { CumulativeTemperatureReading, Temperature } from '../domain/value-objects';
 import {  StationModel, TemperatureReadingModel, CumulativeTemperatureReadingModel,
     TemperatureReadingToAddModel, TemperatureReadingToUpdateModel } from './models';
-
-export const settings = { throttleReports: false };
+import { settings } from '../settings';
 
 export const getStations = async (_: Request, response: Response) => {
-    return response.status(200).send(stationRepository.getAll().map(s => new StationModel(s)));
+    const repo = await getRepository();
+    return response.status(200).send(repo.station.getAll().map(s => new StationModel(s)));
 };
 
 export const getStationById = async (request: Request, response: Response) => {
     const { id } = request.params;
-    const station = stationRepository.getById(id);
+    const repo = await getRepository();
+    const station = repo.station.getById(id);
     if (!station)
         return response.status(404).send({ error: `Station ${id} not found.` });
 
@@ -23,7 +24,8 @@ export const getStationById = async (request: Request, response: Response) => {
 export const getStationTemperatureReadings = async (request: Request, response: Response) => {
     const { stationId } = request.params;
     const { from, to } = getDateRange(request);
-    const readings = temperatureReadingsRepository.getForStation(stationId, from, to);
+    const repo = await getRepository();
+    const readings = await repo.temperatureReadings.getForStation(stationId, from, to);
 
     return response.status(200).send(readings.map(r => new TemperatureReadingModel(r)));
 };
@@ -31,7 +33,8 @@ export const getStationTemperatureReadings = async (request: Request, response: 
 export const getStationCumulativeTemperatureReadings = async (request: Request, response: Response) => {
     const { stationId } = request.params;
     const { from, to } = getDateRange(request);
-    const readings = temperatureReadingsRepository.getForStation(stationId, from, to);
+    const repo = await getRepository();
+    const readings = await repo.temperatureReadings.getForStation(stationId, from, to);
     const cumulatives = CumulativeTemperatureReading.create(readings);
     if (!cumulatives)
         return response.status(204).send();
@@ -41,7 +44,8 @@ export const getStationCumulativeTemperatureReadings = async (request: Request, 
 
 export const getStationTemparatureReadingById = async (request: Request, response: Response) => {
     const { stationId, id } = request.params;
-    const reading = temperatureReadingsRepository.getById(id);
+    const repo = await getRepository();
+    const reading = await repo.temperatureReadings.getById(id);
     if (!reading)
         return response.status(404).send({ error: `Temparature reading ${id} not found.` });
     if (reading.stationId !== stationId)
@@ -53,14 +57,15 @@ export const getStationTemparatureReadingById = async (request: Request, respons
 export const postStationTemperatureReading = async (request: TemperatureReadingToAddRequest, response: Response) => {
     // Get and validate station
     const { stationId } = request.params;
-    const station = stationRepository.getById(stationId);
+    const repo = await getRepository();
+    const station = repo.station.getById(stationId);
     if (!station)
         return response.status(400).send({ error: `Station ${stationId} not found.` });
 
     // Validate the last reported time
     const timeStamp = new Date();
     if (settings.throttleReports) {
-        const lastTimeStamp = temperatureReadingsRepository.getLastTimeStampForStation(stationId);
+        const lastTimeStamp = await repo.temperatureReadings.getLastTimeStampForStation(stationId);
         if (Math.abs(timeStamp.getTime() - lastTimeStamp.getTime()) < 60000)
             return response.status(400).send({ error: `A temperature can be reported only once a minute.` });
     }
@@ -75,9 +80,9 @@ export const postStationTemperatureReading = async (request: TemperatureReadingT
         return response.status(400).send({ error: `Date ${date} is not a valid value.` });
 
     const reading = TemperatureReading.create(
-        temperatureReadingsRepository.getNextId(), timeStamp, readingDate,
+        await repo.temperatureReadings.getNextId(), timeStamp, readingDate,
         temperature, station.id);
-    temperatureReadingsRepository.save(reading);
+    await repo.temperatureReadings.save(reading);
 
     return response.status(201).send(new TemperatureReadingModel(reading));
 };
@@ -85,7 +90,8 @@ export const postStationTemperatureReading = async (request: TemperatureReadingT
 export const putStationTemperatureReading = async (request: TemperatureReadingToUpdateRequest, response: Response) => {
     // Get and validate station
     const { stationId, id } = request.params;
-    const reading = temperatureReadingsRepository.getById(id);
+    const repo = await getRepository();
+    const reading = await repo.temperatureReadings.getById(id);
     if (!reading)
         return response.status(404).send({ error: `Temparature reading ${id} not found.` });
     if (reading.stationId !== stationId)
@@ -102,17 +108,18 @@ export const putStationTemperatureReading = async (request: TemperatureReadingTo
     
     reading.temperature = temperature;
     reading.date = readingDate;
-    temperatureReadingsRepository.save(reading);
+    await repo.temperatureReadings.save(reading);
 
     return response.status(200).send(new TemperatureReadingModel(reading));
 };
 
 export const deleteStationTemperatureReadings = async (request: Request, response: Response) => {
     const { stationId } = request.params;
-    const readings = temperatureReadingsRepository.getForStation(stationId);
+    const repo = await getRepository();
+    const readings = await repo.temperatureReadings.getForStation(stationId);
 
-    readings.forEach(r => {
-        temperatureReadingsRepository.delete(r);
+    readings.forEach(async r => {
+        await repo.temperatureReadings.delete(r);
     });
 
     return response.status(204).send();
@@ -120,13 +127,14 @@ export const deleteStationTemperatureReadings = async (request: Request, respons
 
 export const deleteStationTemparatureReadingById = async (request: Request, response: Response) => {
     const { stationId, id } = request.params;
-    const reading = temperatureReadingsRepository.getById(id);
+    const repo = await getRepository();
+    const reading = await repo.temperatureReadings.getById(id);
     if (!reading)
         return response.status(404).send({ error: `Temparature reading ${id} not found.` });
     if (reading.stationId !== stationId)
         return response.status(404).send({ error: `Temparature reading ${id} not found for station ${stationId}.` });
 
-    temperatureReadingsRepository.delete(reading);
+    await repo.temperatureReadings.delete(reading);
 
     return response.status(204).send();
 };

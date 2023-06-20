@@ -1,5 +1,6 @@
 import { stations, users, temperatureReadings } from "./data";
 import { Station, TemperatureReading, User } from "../domain/entities";
+import { TemperatureReadingsRepository } from "../domain/repositories";
 
 export class HardcodedUserRepository {
     getByUserName(userName: string): User | undefined {
@@ -18,24 +19,24 @@ export class HardcodedStationRepository {
     }
 };
 
-export class InMemoryTemperatureReadingsRepository {
-    getById(id: string): TemperatureReading | undefined {
+export class InMemoryTemperatureReadingsRepository implements TemperatureReadingsRepository {
+    async getById(id: string): Promise<TemperatureReading | undefined> {
         return temperatureReadings[this.indexOf(id)];
     }
 
-    getForStation(stationId: string, from: Date = new Date(0), to: Date = new Date(8640000000000000)): TemperatureReading[] {
+    async getForStation(stationId: string, from: Date = new Date(0), to: Date = new Date(8640000000000000)): Promise<TemperatureReading[]> {
         return temperatureReadings
             .filter(r => r.stationId === stationId && r.date >= from && r.date <= to);
     }
 
-    getLastTimeStampForStation(stationId: string): Date {
+    async getLastTimeStampForStation(stationId: string): Promise<Date> {
         return temperatureReadings
             .filter(r => r.stationId === stationId)
             .map(r => r.timeStamp)
             .reduce((a, b) => a > b ? a : b, new Date(0));
     }
 
-    save(reading: TemperatureReading) {
+    async save(reading: TemperatureReading): Promise<void> {
         const index = this.indexOf(reading.id);
         if (index >= 0) {
             temperatureReadings[index] = reading;
@@ -44,7 +45,7 @@ export class InMemoryTemperatureReadingsRepository {
         }
     }
 
-    delete(reading: TemperatureReading) {
+    async delete(reading: TemperatureReading): Promise<void> {
         const index = this.indexOf(reading.id);
         if (index >= 0)
             temperatureReadings.splice(index, 1);
@@ -54,7 +55,7 @@ export class InMemoryTemperatureReadingsRepository {
         return temperatureReadings.map(r => r.id).indexOf(id);
     }
 
-    getNextId(): string {
+    async getNextId(): Promise<string> {
         return Math.random().toString(36).substring(2, 15) +
             Math.random().toString(36).substring(2, 15);
     }
