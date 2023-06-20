@@ -1,0 +1,1690 @@
+{
+	"info": {
+		"_postman_id": "c9e6e4c0-e342-4521-8fa1-c2c6c6dc9cd7",
+		"name": "Weather Station API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18627305"
+	},
+	"item": [
+		{
+			"name": "Get Stations",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a non empty JSON array\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData).to.be.an(\"array\");\r",
+							"    pm.expect(jsonData.length).to.be.gt(0);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Station 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a station JSON object\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.id).to.be.a(\"string\").and.to.equal(\"00001\");\r",
+							"    pm.expect(jsonData.name).to.be.a(\"string\").and.to.equal(\"Vancouver\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Station 1 Readings (admin)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", () => {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Station 2 Readings (admin)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", () => {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00002/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00002",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Reading to Station 1 (300 kelvin)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", () => {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a temperature reading JSON object\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.id).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.date).to.be.a(\"string\").and.to.equal(\"2023-01-01T10:00:00.000Z\");\r",
+							"    pm.expect(jsonData.temperature.kelvin).to.be.a(\"number\").and.to.equal(300);\r",
+							"    pm.expect(jsonData.temperature.celsius).to.be.a(\"number\").and.to.equal(27);\r",
+							"    pm.expect(jsonData.temperature.fahrenheit).to.be.a(\"number\").and.to.equal(80);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "station-00001",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2023-01-01T10:00:00.000Z\",\r\n    \"temperatureInKelvin\": 300\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Reading to Station 1 (303 kelvin)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", () => {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a temperature reading JSON object\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.id).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.date).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.temperature.kelvin).to.be.a(\"number\").and.to.equal(303);\r",
+							"    pm.expect(jsonData.temperature.celsius).to.be.a(\"number\").and.to.equal(30);\r",
+							"    pm.expect(jsonData.temperature.fahrenheit).to.be.a(\"number\").and.to.equal(86);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "station-00001",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2023-01-02T10:00:00.000Z\",\r\n    \"temperatureInKelvin\": 303\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Reading to Station 1 (293 kelvin)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", () => {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a temperature reading JSON object\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.id).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.date).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.temperature.kelvin).to.be.a(\"number\").and.to.equal(293);\r",
+							"    pm.expect(jsonData.temperature.celsius).to.be.a(\"number\").and.to.equal(20);\r",
+							"    pm.expect(jsonData.temperature.fahrenheit).to.be.a(\"number\").and.to.equal(68);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "station-00001",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2023-01-03T10:00:00.000Z\",\r\n    \"temperatureInKelvin\": 293\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Reading to Station 1 (283 kelvin)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", () => {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a temperature reading JSON object\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.id).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.date).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.temperature.kelvin).to.be.a(\"number\").and.to.equal(283);\r",
+							"    pm.expect(jsonData.temperature.celsius).to.be.a(\"number\").and.to.equal(10);\r",
+							"    pm.expect(jsonData.temperature.fahrenheit).to.be.a(\"number\").and.to.equal(50);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "station-00001",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2023-01-04T10:00:00.000Z\",\r\n    \"temperatureInKelvin\": 283\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Reading to Station 2 (300 kelvin)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", () => {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a temperature reading JSON object\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.id).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.date).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.temperature.kelvin).to.be.a(\"number\").and.to.equal(300);\r",
+							"    pm.expect(jsonData.temperature.celsius).to.be.a(\"number\").and.to.equal(27);\r",
+							"    pm.expect(jsonData.temperature.fahrenheit).to.be.a(\"number\").and.to.equal(80);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "station-00002",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2023-01-10T10:00:00.000Z\",\r\n    \"temperatureInKelvin\": 300\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00002/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00002",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Reading to Station 2 (303 kelvin)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", () => {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a temperature reading JSON object\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.id).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.date).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.temperature.kelvin).to.be.a(\"number\").and.to.equal(303);\r",
+							"    pm.expect(jsonData.temperature.celsius).to.be.a(\"number\").and.to.equal(30);\r",
+							"    pm.expect(jsonData.temperature.fahrenheit).to.be.a(\"number\").and.to.equal(86);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "station-00002",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2023-01-11T10:00:00.000Z\",\r\n    \"temperatureInKelvin\": 303\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00002/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00002",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Reading to Station 2 (293 kelvin)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", () => {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a temperature reading JSON object\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.id).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.date).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.temperature.kelvin).to.be.a(\"number\").and.to.equal(293);\r",
+							"    pm.expect(jsonData.temperature.celsius).to.be.a(\"number\").and.to.equal(20);\r",
+							"    pm.expect(jsonData.temperature.fahrenheit).to.be.a(\"number\").and.to.equal(68);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "station-00002",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2023-01-12T10:00:00.000Z\",\r\n    \"temperatureInKelvin\": 293\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00002/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00002",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Station 1 Readings (No user)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", () => {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Station 1 Readings (Non Existing User)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", () => {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "NON-EXISTING",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Station 1 Readings (user002)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", () => {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user002",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Station 1 Readings (user001)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a JSON array of length 4\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData).to.be.an(\"array\");\r",
+							"    pm.expect(jsonData.length).to.equal(4);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"First reading matches added data\", () => {\r",
+							"    const first = JSON.parse(responseBody)[0];\r",
+							"\r",
+							"    pm.expect(first.id).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.variables.set(\"readingId\", first.id);\r",
+							"\r",
+							"    pm.expect(first.date).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(first.temperature.kelvin).to.be.a(\"number\").and.to.equal(300);\r",
+							"    pm.expect(first.temperature.celsius).to.be.a(\"number\").and.to.equal(27);\r",
+							"    pm.expect(first.temperature.fahrenheit).to.be.a(\"number\").and.to.equal(80);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user001",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Station 1 Readings With Range (user001)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a JSON array of length 3\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData).to.be.an(\"array\");\r",
+							"    pm.expect(jsonData.length).to.equal(3);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user001",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings?from=2023-01-01&to=2023-01-03",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "2023-01-01"
+						},
+						{
+							"key": "to",
+							"value": "2023-01-03"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Station 1 Readings With Open Range (user001)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a JSON array of length 3\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData).to.be.an(\"array\");\r",
+							"    pm.expect(jsonData.length).to.equal(3);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user001",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings?from=2023-01-02",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "2023-01-02"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Station 1 Reading (user001)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a reading JSON object\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.id).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.date).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.temperature.kelvin).to.be.a(\"number\").and.to.equal(300);\r",
+							"    pm.expect(jsonData.temperature.celsius).to.be.a(\"number\").and.to.equal(27);\r",
+							"    pm.expect(jsonData.temperature.fahrenheit).to.be.a(\"number\").and.to.equal(80);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user001",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings/{{readingId}}",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings",
+						"{{readingId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Station 1 Reading (user002)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", () => {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user002",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings/{{readingId}}",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings",
+						"{{readingId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Station 2 Readings (user002)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a JSON array of length 3\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData).to.be.an(\"array\");\r",
+							"    pm.expect(jsonData.length).to.equal(3);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user002",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00002/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00002",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Station 1 Readings (admin)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a JSON array of length 4\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData).to.be.an(\"array\");\r",
+							"    pm.expect(jsonData.length).to.equal(4);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"First reading matches added data\", () => {\r",
+							"    const first = JSON.parse(responseBody)[0];\r",
+							"    pm.expect(first.id).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(first.date).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(first.temperature.kelvin).to.be.a(\"number\").and.to.equal(300);\r",
+							"    pm.expect(first.temperature.celsius).to.be.a(\"number\").and.to.equal(27);\r",
+							"    pm.expect(first.temperature.fahrenheit).to.be.a(\"number\").and.to.equal(80);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Station 2 Readings (admin)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a JSON array of length 3\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData).to.be.an(\"array\");\r",
+							"    pm.expect(jsonData.length).to.equal(3);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00002/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00002",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Station 1 Cumulative Readings (user001)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a cumulative JSON object with valid data\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.min.celsius).to.be.a(\"number\").and.to.equal(10);\r",
+							"    pm.expect(jsonData.max.celsius).to.be.a(\"number\").and.to.equal(30);\r",
+							"    pm.expect(jsonData.average.celsius).to.be.a(\"number\").and.to.equal(22);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user001",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/cumulative-temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"cumulative-temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Station 1 Reading (user001)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a reading JSON object\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.id).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.date).to.be.a(\"string\").and.to.equal(\"2023-05-01T10:00:00.000Z\");\r",
+							"    pm.expect(jsonData.temperature.kelvin).to.be.a(\"number\").and.to.equal(333);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user001",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2023-05-01T10:00:00.000Z\",\r\n    \"temperatureInKelvin\": 333\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings/{{readingId}}",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings",
+						"{{readingId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Station 1 Reading (user001)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a reading JSON object\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.id).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.date).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.temperature.kelvin).to.be.a(\"number\").and.to.equal(333);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user001",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings/{{readingId}}",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings",
+						"{{readingId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Station 1 Reading (admin)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is a reading JSON object\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.id).to.be.a(\"string\").and.not.to.be.empty;\r",
+							"    pm.expect(jsonData.date).to.be.a(\"string\").and.to.equal(\"2023-11-01T10:00:00.000Z\");\r",
+							"    pm.expect(jsonData.temperature.kelvin).to.be.a(\"number\").and.to.equal(222);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2023-11-01T10:00:00.000Z\",\r\n    \"temperatureInKelvin\": 222\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings/{{readingId}}",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings",
+						"{{readingId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Station 1 Reading (user002)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", () => {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user002",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2023-11-01T10:00:00.000Z\",\r\n    \"temperatureInKelvin\": 333\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings/{{readingId}}",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings",
+						"{{readingId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Station 1 Readings (user002)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", () => {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user002",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Station 1 Readings (user001)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", () => {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user001",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Station 1 Readings (user001)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is an empty JSON array\", () => {\r",
+							"    const jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData).to.be.an(\"array\");\r",
+							"    pm.expect(jsonData.length).to.equal(0);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user001",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{rootApiUrl}}/stations/00001/temperature-readings",
+					"host": [
+						"{{rootApiUrl}}"
+					],
+					"path": [
+						"stations",
+						"00001",
+						"temperature-readings"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

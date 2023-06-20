@@ -1,0 +1,34 @@
+# Compiled output
+/dist
+/out
+
+# Dependencies
+/node_modules
+
+# Debugging
+/.vscode
+/.idea
+
+# Environment variables
+/.env
+
+# TypeScript cache
+*.tsbuildinfo
+
+# IDE files
+*.iml
+*.ipr
+*.iws
+
+# Logs and backups
+logs/
+*.log
+*.bak
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# User-specific files
+/.idea/workspace.xml
+/.idea/tasks.xml
