@@ -3,7 +3,9 @@ import { Station, TemperatureReading, User } from "../domain/entities";
 import { TemperatureReadingsRepository } from "../domain/repositories";
 
 export class HardcodedUserRepository {
-    getByUserName(userName: string): User | undefined {
+    getByUserName(userName: string | undefined): User | undefined {
+        if (!userName)
+            return undefined;
         const lowerCaseUserName = userName.toLowerCase();
         return users.filter(u => u.userName.toLowerCase() === lowerCaseUserName)[0];
     }

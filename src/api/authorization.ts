@@ -28,13 +28,7 @@ export function getUserName(authorization: string | undefined): string | undefin
 };
 
 async function isAuthorizedForStation(userName: string | undefined, stationId: string): Promise<boolean> {
-    if (!userName)
-        return false;
-
     const repo = await getRepository();
     const user = repo.user.getByUserName(userName);
-    if (!user)
-        return false;
-
-    return (user.isAdmin || user.station === stationId);
+    return user ? user.isAdmin || user.station === stationId : false;
 };
