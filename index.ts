@@ -1,4 +1,5 @@
 import express, { Application, Request, Response } from "express";
+import { settings } from "./src/settings";
 import {
     getStations, getStationById,
     postStationTemperatureReading,
@@ -8,7 +9,7 @@ import {
 import { authorizeForStation } from "./src/api/authorization";
 
 const app: Application = express();
-const port = 3000;
+const port = settings.port;
 
 // Body parsing Middleware
 app.use(express.json());
