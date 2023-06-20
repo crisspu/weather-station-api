@@ -211,6 +211,11 @@ Authorization: Basic dXNlcjAwMTo=
           "kelvin": 295,
           "celsius": 22,
           "fahrenheit": 71
+      },
+      "median": {
+          "kelvin": 297,
+          "celsius": 23,
+          "fahrenheit": 74
       }
   }
   ```

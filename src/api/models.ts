@@ -39,11 +39,13 @@ export class CumulativeTemperatureReadingModel {
     min: TemperatureModel;
     max: TemperatureModel;
     average: TemperatureModel;
+    median: TemperatureModel;
 
     constructor(cumulatives: CumulativeTemperatureReading) {
         this.min = new TemperatureModel(cumulatives.min);
         this.max = new TemperatureModel(cumulatives.max);
         this.average = new TemperatureModel(cumulatives.average);
+        this.median = new TemperatureModel(cumulatives.median);
     }
 }
 
