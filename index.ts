@@ -23,16 +23,20 @@ app.get("/", async (_: Request, response: Response) => {
     });
 });
 
+// Authorization
+app.use("/api/stations/:stationId/temperature-readings", authorizeForStation);
+app.use("/api/stations/:stationId/cumulative-temperature-readings", authorizeForStation);
+
 // Mapping
 app.get("/api/stations", getStations);
 app.get("/api/stations/:id", getStationById);
-app.get("/api/stations/:stationId/temperature-readings", authorizeForStation, getStationTemperatureReadings);
-app.get("/api/stations/:stationId/cumulative-temperature-readings", authorizeForStation, getStationCumulativeTemperatureReadings);
-app.post("/api/stations/:stationId/temperature-readings", authorizeForStation, postStationTemperatureReading);
-app.delete("/api/stations/:stationId/temperature-readings", authorizeForStation, deleteStationTemperatureReadings);
-app.get("/api/stations/:stationId/temperature-readings/:id", authorizeForStation, getStationTemparatureReadingById);
-app.put("/api/stations/:stationId/temperature-readings/:id", authorizeForStation, putStationTemperatureReading);
-app.delete("/api/stations/:stationId/temperature-readings/:id", authorizeForStation, deleteStationTemparatureReadingById);
+app.get("/api/stations/:stationId/temperature-readings", getStationTemperatureReadings);
+app.get("/api/stations/:stationId/cumulative-temperature-readings", getStationCumulativeTemperatureReadings);
+app.post("/api/stations/:stationId/temperature-readings", postStationTemperatureReading);
+app.delete("/api/stations/:stationId/temperature-readings", deleteStationTemperatureReadings);
+app.get("/api/stations/:stationId/temperature-readings/:id", getStationTemparatureReadingById);
+app.put("/api/stations/:stationId/temperature-readings/:id", putStationTemperatureReading);
+app.delete("/api/stations/:stationId/temperature-readings/:id", deleteStationTemparatureReadingById);
 
 try {
     app.listen(port, (): void => {
