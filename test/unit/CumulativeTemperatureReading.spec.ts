@@ -13,16 +13,17 @@ describe('CumulativeTemperatureReading', () => {
     it('should return the cumulative values', () => {
         const readings = [
             TemperatureReading.create("1", new Date(), new Date(), Temperature.create(100)!, "1"),
-            TemperatureReading.create("1", new Date(), new Date(), Temperature.create(200)!, "1"),
-            TemperatureReading.create("1", new Date(), new Date(), Temperature.create(300)!, "1"),
-            TemperatureReading.create("1", new Date(), new Date(), Temperature.create(400)!, "1"),
-            TemperatureReading.create("1", new Date(), new Date(), Temperature.create(500)!, "1")
+            TemperatureReading.create("1", new Date(), new Date(), Temperature.create(180)!, "1"),
+            TemperatureReading.create("1", new Date(), new Date(), Temperature.create(210)!, "1"),
+            TemperatureReading.create("1", new Date(), new Date(), Temperature.create(322)!, "1"),
+            TemperatureReading.create("1", new Date(), new Date(), Temperature.create(381)!, "1"),
         ];
         const cumulations = CumulativeTemperatureReading.create(readings);
         expect(cumulations).not.to.be.undefined;
         expect(cumulations?.min.kelvin).to.equal(100);
-        expect(cumulations?.max.kelvin).to.equal(500);
-        expect(cumulations?.average.kelvin).to.equal(300);
+        expect(cumulations?.max.kelvin).to.equal(381);
+        expect(cumulations?.average.kelvin).to.equal(239);
+        expect(cumulations?.median.kelvin).to.equal(210);
     });
 
 });
